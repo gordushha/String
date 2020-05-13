@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #pragma warning(disable:4996)
+#include "Header.h"
 
 size_t my_strlen(const char* str)
 {
@@ -11,13 +12,9 @@ size_t my_strlen(const char* str)
   }
   return size;
 }
+TString::TString() = default;
 
-class TString
-{
-public:
-  TString() = default;
-
-  TString(const char* str)
+  TString( char* str)
   {
     m_size = my_strlen(str);
     m_data = new char[m_size + 1]{};
@@ -27,12 +24,12 @@ public:
     }
   }
 
-  TString(const TString& other)
+  TString::TString(const TString& other)
     : TString(other.m_data)
   {
   }
 
-  ~TString()
+  TString::~TString()
   {
     if (m_data != nullptr)
       delete[] m_data;
@@ -48,7 +45,7 @@ public:
     return m_data;
   }
 
-  TString operator+(const TString& other)
+  TString::TString operator+(const TString& other)
   {
     TString newStr;
 
@@ -75,12 +72,12 @@ public:
     return newStr;
   }
 
-  char& operator[](size_t i)
+  char& TString::operator[](size_t i)
   {
     return m_data[i];
   }
 
-  const char& operator[](size_t i) const
+  const char& TString::operator[](size_t i) const
   {
     if (i < 0 || i >= m_size)
       throw "nil'zya(";
@@ -88,7 +85,7 @@ public:
       return m_data[i];
   }
 
-  bool operator==(const TString& other)
+  bool TString::operator==(const TString& other)
   {
     if (m_size != other.m_size)
       return false;
@@ -100,7 +97,7 @@ public:
     return true;
   }
 
-  bool operator!=(const TString& other)
+  bool TString:: operator!=(const TString& other)
   {
     return !(*this == other);
   }
@@ -112,7 +109,7 @@ public:
     return b;
   }
 
-  bool operator<(const TString& other)
+  bool TString::operator<(const TString& other)
   {
     for (size_t i = 0; i < my_min(m_size, other.m_size); ++i)
     {
@@ -122,14 +119,14 @@ public:
     return m_size < other.m_size;
   }
 
-  bool operator>(const TString& other)
+  bool TString::operator>(const TString& other)
   {
     if (*this < other)
       return false;
     return *this != other;
   }
 
-  TString& operator=(const TString& other)
+  TString& TString::operator=(const TString& other)
   {
     if (this == &other) //проверка на самокопирование
       return *this;
@@ -144,6 +141,16 @@ public:
     }
     return *this;
   }
+
+  int TString::find(const char* e)
+  {
+    return 0;
+  }
+
+  TString* TString::Tstrtok(const char* c)
+  {
+    return nullptr;
+  }
   
   //Возвращает позицию
   int find(const char* e) {
@@ -154,7 +161,6 @@ public:
       return NULL;
   }
 
-  //MultiFaCs Productions (c) all rights are reserved
   TString* Tstrtok(const char* c) {
     int count = 0;
 
@@ -184,17 +190,6 @@ public:
     return result;
   }
 
-private:
-  size_t m_size = 0;
-  char* m_data = nullptr;
-};
-
-// !(a && b) == !a || !b
-// "dsfdsf#dsfds##fgfghjf";
-// "dsfdsf", "dsfds", "", "fgfghjf"
-// std::vector<TString> foo(char ch);
-// size_t find(char ch);
-// size_t find(const char* str);
 
 std::ostream& operator<<(std::ostream& stream, const TString& self)
 {
@@ -208,28 +203,8 @@ std::istream& operator>>(std::istream& stream, TString& self)
   stream >> buf;
   self = buf;
   return stream;
-}
+};
+private:
+  size_t m_size = 0;
+  char* m_data = nullptr;
 
-int main()
-{
-  TString empty_str;
-  std::cin >> empty_str;
-
-  empty_str = empty_str;
-
-  const char* str = "Hello";
-  char arr[6] = { 'H', 'e', 'l', 'l', 'o', '\0' };
-
-  const char* ptr = str + 4;
-
-  char ch = *ptr; // ??? 
-  size_t s = my_strlen(str); // = 5
-
-  TString my_str("Hello");
-  TString my_copy(my_str);
-  std::cout << my_copy << std::endl;
-  bool is_equal = my_str == my_copy;
-  bool is_not_equal = my_str != my_copy;
-
-  return 0;
-}
